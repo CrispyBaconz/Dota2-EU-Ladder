@@ -437,7 +437,8 @@ class Command(BaseCommand):
         await msg.channel.send(
             f'```\n'
             f'{player.name}\n'
-            f'MMR: {player.dota_mmr}\n'
+            f'MMR: {player.ladder_mmr}\n'
+            #f'MMR: {player.dota_mmr}\n'
             f'Dotabuff: {dotabuff}\n'
             f'Ladder: {player_url}\n\n'
             #f'Ladder MMR: {player.ladder_mmr}\n'
@@ -1096,7 +1097,7 @@ class Command(BaseCommand):
                (f'Min MMR: {q.min_mmr}\n' if show_min_mmr else '\n') + \
                f'Players: {q.players.count()} (' + \
                f' | '.join(f'{p.name}-{p.ladder_mmr}' for p in players) + ')\n\n' + \
-               f'Avg. MMR: {avg_mmr} {"LUL" if avg_mmr < 4000 else ""} \n' + \
+               f'Avg. MMR: {avg_mmr} \n' + \
                f'```'
 
     @staticmethod
@@ -1187,7 +1188,7 @@ class Command(BaseCommand):
 
         if deleted > 0:
             await channel.send(
-                'Purged everyone from the queue!\n' +
+                'Purged afk members from the queue!\n' +
                 '```\n' +
                 ' | '.join(p.name for p in afk_list) +
                 '\n```'

@@ -1402,24 +1402,27 @@ class Command(BaseCommand):
     @staticmethod
     def assign_queue_to_bot(bot, queue):
         # if in game, do nothing
+        #print('step 1')
         if bot.game_start_time:
             return
-
+        #print('step 2')
         # if queue players changed, reset votes and invited list
         if bot.balance_answer != queue.balance:
             bot.invited_players = []
             bot.pd_votes = set()
             bot.ab_votes = set()
-
+        #print('step 3')
         bot.queue = queue
         bot.balance_answer = queue.balance
-
+        #print('step 4')
         # if queue is full, invite players
         if queue and queue.players.count() == 10:
+            #print('step 4.5')
             Command.invite_players(bot)
-
+        #print('step 5')
         bot.lobby_options['game_name'] = Command.generate_lobby_queue_name(bot)
         bot.config_practice_lobby(bot.lobby_options)
+        #print('fin')
 
     @staticmethod
     def sidepick_finish(bot):
@@ -1438,7 +1441,7 @@ class Command(BaseCommand):
 
         while True:
             gevent.sleep(5)
-            # print('===========sync_queue=============')
+            #print('===========sync_queue=============')
 
             if not all(bot.ready for bot in self.bots):
                 print('Bots not ready')
@@ -1447,17 +1450,20 @@ class Command(BaseCommand):
             queues = LadderQueue.objects.filter(active=True)
             queues = {q.id: q for q in queues}
 
-            # print('Active queues: ' + ' | '.join(str(q) for q in queues.values()))
+            #print('Active queues: ' + ' | '.join(str(q) for q in queues.values()))
 
             # first update assigned queues in bots
             # at this step some of the bots might turn free
             busy_bots = [b for b in self.bots if b.queue and b.lobby]
 
-            # print('Busy bots:\n' +
+            #print('Busy bots:\n' +
             #       '\n'.join(f'{b.lobby.game_name}: {b.queue}' for b in busy_bots))
 
             for bot in busy_bots:
+                #print('\n Bot Lobby game: ' + bot.lobby.game_name + '\n')
+                #print('\n Bot Queue: ' + str(bot.queue.id) + '\n')
                 q = queues.pop(bot.queue.id, None)
+
                 if q:
                     # update queue object in bot
                     Command.assign_queue_to_bot(bot, q)
@@ -1470,9 +1476,13 @@ class Command(BaseCommand):
             # now assign new queues to free bots
             free_bots = [b for b in self.bots if is_bot_free(b)]
 
-            # print('Free bots: ' + ' | '.join(b.lobby.game_name for b in free_bots))
+            #print('Free bots: ' + ' | '.join(b.lobby.game_name for b in free_bots))
 
             for bot in free_bots:
+                #print('\n Bot Lobby game: ' + bot.lobby.game_name + '\n')
+                #print('Active queues: ' + ' | '.join(str(q) for q in queues.values()))
                 if len(queues) > 0:
                     _, q = queues.popitem()
+                    #print('\n Queue name: ' + str(q) + '\n')
                     Command.assign_queue_to_bot(bot, q)
+
