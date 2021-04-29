@@ -238,12 +238,19 @@ class Command(BaseCommand):
         bot.pd_votes = set()
         bot.ab_votes = set()
 
+
+        game_mode = LadderSettings.get_solo().game_mode
+        if game_mode == 'MODE_CM':
+            game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM
+        else:
+            game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CD
+
         bot.staff_mode = False
         bot.players = {}
         bot.invited_players = []
         bot.lobby_options = {
             'game_name': Command.generate_lobby_name(bot),
-            'game_mode': dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM,
+            'game_mode': game_type,
             'server_region': GameServers[bot.server],
             'leagueid': int(os.environ.get('LEAGUE_ID', -1)),
             'fill_with_bots': False,
@@ -322,7 +329,7 @@ class Command(BaseCommand):
         try:
             player = Player.objects.get(dota_id=msg.account_id)
         except Player.DoesNotExist:
-            bot.channels.lobby.send('%s, who the fuck are you?' % msg.persona_name)
+            bot.channels.lobby.send('%s, hmm who are you??' % msg.persona_name)
             return
 
         if player.banned:
@@ -816,11 +823,11 @@ class Command(BaseCommand):
             return
 
         if mmr < min_allowed_mmr:
-            bot.channels.lobby.send('Your dick is too small. Ask admins to register you.')
+            bot.channels.lobby.send('Your mmr does not seem right. Ask admins to register you.')
             return
 
         if mmr > max_allowed_mmr:
-            bot.channels.lobby.send('Your dick is too big. Show it to admins!')
+            bot.channels.lobby.send('Your mmr is too high! Show it to admins!')
             return
 
         # all is good, can register

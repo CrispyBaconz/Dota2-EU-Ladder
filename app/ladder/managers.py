@@ -101,7 +101,7 @@ class MatchManager(models.Manager):
             ScoreChange.objects.create(
                 player=matchPlayer.player,
                 score_change=score_change,
-                #mmr_change=mmr_change,
+                mmr_change=mmr_change,
                 match=matchPlayer,
                 season=LadderSettings.get_solo().current_season,
             )

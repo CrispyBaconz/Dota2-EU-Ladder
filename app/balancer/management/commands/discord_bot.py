@@ -437,8 +437,8 @@ class Command(BaseCommand):
         await msg.channel.send(
             f'```\n'
             f'{player.name}\n'
-            f'MMR: {player.ladder_mmr}\n'
-            #f'MMR: {player.dota_mmr}\n'
+            f'Ladder MMR: {player.ladder_mmr}\n'
+            f'Original MMR: {player.dota_mmr}\n'
             f'Dotabuff: {dotabuff}\n'
             f'Ladder: {player_url}\n\n'
             #f'Ladder MMR: {player.ladder_mmr}\n'
@@ -682,7 +682,7 @@ class Command(BaseCommand):
 
         if LadderQueue.objects.filter(channel=channel, active=True).exists():
             await msg.channel.send(
-                f'Cannot change MMR when there are active queue in the channel')
+                f'Cannot change MMR when there are active queues in the channel')
             return
 
         channel.min_mmr = min_mmr
@@ -1085,6 +1085,9 @@ class Command(BaseCommand):
     def queue_str(q: LadderQueue, show_min_mmr=True):
         players = q.players.all()
         avg_mmr = round(mean(p.ladder_mmr for p in players))
+        #TODO
+        #if LadderSettings.get_solo().game_mode == 'MODE_CM'
+        #    captains_draft = true
 
         game_str = ''
         if q.game_start_time:
@@ -1092,7 +1095,7 @@ class Command(BaseCommand):
             game_str = f'Game started {time_game}. Spectate: watch_server {q.game_server}\n'
 
         return f'```\n' + \
-               f'Queue #{q.id}\n' + \
+               f'Captains Draft Queue #{q.id}\n' + \
                game_str + \
                (f'Min MMR: {q.min_mmr}\n' if show_min_mmr else '\n') + \
                f'Players: {q.players.count()} (' + \
