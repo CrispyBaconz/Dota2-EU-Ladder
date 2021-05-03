@@ -240,10 +240,10 @@ class Command(BaseCommand):
 
 
         game_mode = LadderSettings.get_solo().game_mode
-        if game_mode == 'MODE_CM':
-            game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM
-        else:
-            game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CD
+        #if game_mode == 'MODE_CM':
+        #    game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM
+        #else:
+        game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM
 
         bot.staff_mode = False
         bot.players = {}

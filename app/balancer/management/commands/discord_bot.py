@@ -1095,7 +1095,7 @@ class Command(BaseCommand):
             game_str = f'Game started {time_game}. Spectate: watch_server {q.game_server}\n'
 
         return f'```\n' + \
-               f'Captains Draft Queue #{q.id}\n' + \
+               f'Queue #{q.id}\n' + \
                game_str + \
                (f'Min MMR: {q.min_mmr}\n' if show_min_mmr else '\n') + \
                f'Players: {q.players.count()} (' + \
