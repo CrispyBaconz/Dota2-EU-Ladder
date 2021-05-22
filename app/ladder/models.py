@@ -142,13 +142,13 @@ class LadderSettings(SingletonModel):
         (PLAYER_DRAFT, 'Player draft'),
     )
     draft_mode = models.PositiveSmallIntegerField(choices=DRAFT_CHOICES, default=AUTO_BALANCE)
-    MODE_CM = 0
-    MODE_CD = 1
-    MODE_CHOICES = (
-        (MODE_CM, 'Captains Mode'),
-        (MODE_CD, 'Captains Draft')
-    )
-    game_mode = models.PositiveSmallIntegerField(choices=MODE_CHOICES, default=MODE_CM)
+    #MODE_CM = 0
+    #MODE_CD = 1
+    #MODE_CHOICES = (
+    #    (MODE_CM, 'Captains Mode'),
+    #    (MODE_CD, 'Captains Draft')
+    #)
+    #game_mode = models.PositiveSmallIntegerField(choices=MODE_CHOICES, default=MODE_CM)
 
 
 class DiscordChannels(SingletonModel):

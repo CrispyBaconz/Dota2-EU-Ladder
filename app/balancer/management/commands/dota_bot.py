@@ -238,12 +238,10 @@ class Command(BaseCommand):
         bot.pd_votes = set()
         bot.ab_votes = set()
 
+        day = datetime.now().weekday()
+        time = datetime.now()
 
-        game_mode = LadderSettings.get_solo().game_mode
-        #if game_mode == 'MODE_CM':
-        #    game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM
-        #else:
-        game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM
+        game_type = dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CD if day in [1,3] and time.hour > 6 else dota2.enums.DOTA_GameMode.DOTA_GAMEMODE_CM
 
         bot.staff_mode = False
         bot.players = {}

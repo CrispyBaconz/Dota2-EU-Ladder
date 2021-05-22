@@ -5,6 +5,7 @@ from collections import defaultdict, deque
 from datetime import timedelta
 import random
 from statistics import mean
+import datetime
 
 import discord
 import pytz
@@ -969,7 +970,7 @@ class Command(BaseCommand):
 
         # check if player's mmr does not exceed limit, if there's any
         if player.ladder_mmr > channel.max_mmr > 0:
-            response = f'`{player}`, your dick is too big. Chop it off.'
+            response = f'`{player}`, your mmr is too powerful!'
             return None, False, response
 
         queue = player.ladderqueue_set.filter(
@@ -1092,8 +1093,10 @@ class Command(BaseCommand):
         players = q.players.all()
         avg_mmr = round(mean(p.ladder_mmr for p in players))
         #TODO
-        #if LadderSettings.get_solo().game_mode == 'MODE_CM'
-        #    captains_draft = true
+
+        day = datetime.datetime.today().weekday() #0 Mon, 6 Sun
+        time = datetime.datetime.now()
+
 
         game_str = ''
         if q.game_start_time:
@@ -1101,7 +1104,7 @@ class Command(BaseCommand):
             game_str = f'Game started {time_game}. Spectate: watch_server {q.game_server}\n'
 
         return f'```\n' + \
-               f'Queue #{q.id}\n' + \
+               (f'Captains Draft Queue #{q.id}\n' if day in [1,3] and time.hour > 6 else f'Queue #{q.id}\n') + \
                game_str + \
                (f'Min MMR: {q.min_mmr}\n' if show_min_mmr else '\n') + \
                f'Players: {q.players.count()} (' + \
